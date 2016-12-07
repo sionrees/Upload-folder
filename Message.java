@@ -3,60 +3,70 @@ import java.util.ArrayList;
 /**
  * Created by sion_rees on 29/11/2016.
  */
+import java.util.Date;
+
 public class Message {
-    private final int MAX_NUMBER_OF_DESCRIPTION = 100;
-    protected String description;
-    protected String messageType;
-    private Profile sender;
-    private ArrayList<Profile> recipient;
-    private String dateOfMessage;
-    private String timeOfMessage;
+    private static int m_messageIdGen= 0;
+    private Integer m_messageId;
+    protected String m_messageBlock;
+    protected String m_messageType;
+    private Integer m_sender;
+    private Integer m_recipient;
+    private String m_dateTime;
+    private String m_senderName;
 
     //Message constructor
-    public Message (String description, String messageType, Profile sender,
-                    ArrayList<Profile> recipient,String dateOfMessage, String timeOfMessage){
-        this.description = description;
-        this.messageType = messageType;
-        this.sender = sender;
-        this.recipient = recipient;
-        this.dateOfMessage = dateOfMessage;
-        this.timeOfMessage = timeOfMessage;
+    public Message(String messageBlock, String messageType, Integer sender,
+                   Integer recipient, String dateTime, String senderName){
+        this.m_messageBlock = messageBlock;
+        this.m_messageType = messageType;
+        this.m_sender = sender;
+        this.m_recipient = recipient;
+        this.m_senderName = senderName;
+        this.m_dateTime = dateTime;
+        this.m_messageId = m_messageIdGen;
+        m_messageIdGen +=1;
+    }
+    public Message(String messageBlock, String messageType, Integer sender,
+                   Integer recipient, String dateTime, String senderName, int messageId){
+        this.m_messageBlock = messageBlock;
+        this.m_messageType = messageType;
+        this.m_sender = sender;
+        this.m_recipient = recipient;
+        this.m_senderName = senderName;
+        this.m_dateTime = dateTime;
+        this.m_messageId = messageId;
     }
 
-    public String getDescription() {
-        return description;
+    public int getMessageId() {
+        return m_messageId;
+    }
+
+    public String getMessageBlock() {
+        return m_messageBlock;
     }
 
     public String getMessageType() {
-        return messageType;
+        return m_messageType;
     }
 
     public void setMessageType(String messageType) {
-        this.messageType = messageType;
+        this.m_messageType = messageType;
     }
 
-    public Profile getSender() {
-        return sender;
+    public Integer getSender() {
+        return m_sender;
     }
 
-    public ArrayList<Profile> getRecipient() {
-        return recipient;
+    public Integer getRecipient() {
+        return m_recipient;
     }
 
     public String getDateOfMessage() {
-        return dateOfMessage;
+        return m_dateTime;
     }
 
-    public void setDateOfMessage(String dateOfMessage) {
-        this.dateOfMessage = dateOfMessage;
+    public String getSenderName() {
+        return m_senderName;
     }
-
-    public String getTimeOfMessage() {
-        return timeOfMessage;
-    }
-
-    public void setTimeOfMessage(String timeOfMessage) {
-        this.timeOfMessage = timeOfMessage;
-    }
-
 }

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -26,15 +25,17 @@ import javax.swing.UIManager;
 
 public class ChatGUI {
     String m_windowName = "Conversation";
-    ChatGUI m_chatGUI;
     JFrame m_newFrame = new JFrame(m_windowName);
     JButton m_sendMessage;
     JTextField m_messageBox;
     JTextArea m_chatBox;
-    JFrame m_preFrame;
-    String  m_username = "Sion";
+    String  m_username;
+
 
     public static void main(String[] args) {
+        //Temporary user1 and user 2 to load messages #TEST#
+        Integer user1= 1;
+        Integer user2= 2;
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -45,14 +46,23 @@ public class ChatGUI {
                 }
                 ChatGUI chatGUI = new ChatGUI();
                 chatGUI.display();
-                chatGUI.loadConv();
+                //Temp hard coded user1&2 to test
+                chatGUI.loadConv(DBMngr.LoadMessages.getMessMYSQL(user1, user2));
+
             }
         });
     }
 
-    public static void loadConv() {
-        //load messages into conv
+    //Loads basic messages from an array into the chat window
+    public void loadConv(ArrayList<Message> messArray){
+        while(!messArray.isEmpty()){
+            String messBlock = messArray.get(0).getMessageBlock();
+            this.m_username = messArray.get(0).getSenderName();
+            m_chatBox.append("<" + m_username + ">:  " + messBlock + "\n");
+            messArray.remove(0);
+        }
     }
+
 
     public void display() {
         JPanel mainPanel = new JPanel();
@@ -60,6 +70,7 @@ public class ChatGUI {
 
 
         JPanel southPanel = new JPanel();
+        //Sets out text box and button at the bottom
         southPanel.setBackground(Color.BLUE);
         southPanel.setLayout(new GridBagLayout());
 
@@ -105,7 +116,7 @@ public class ChatGUI {
 
     class sendMessageButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
-            postToScreen();
+            postFromMessBox();
         }
     }
     class EnterPress implements KeyListener{
@@ -116,7 +127,7 @@ public class ChatGUI {
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode()==KeyEvent.VK_ENTER){
-                postToScreen();
+                postFromMessBox();
             }
         }
         @Override
@@ -125,7 +136,7 @@ public class ChatGUI {
         }
     }
 
-    private void postToScreen(){
+    private void postFromMessBox(){
         if (m_messageBox.getText().length() < 1) {
             // do nothing
         } else {
@@ -138,25 +149,6 @@ public class ChatGUI {
     }
 
 
-    //Testing out class in class
-    //Trying to add messages to chatGUI EXPERIMENT
-    public class LoadMessages {
-        private ArrayList<Message> messageQueue;
-
-        public LoadMessages() {
-            messageQueue = new ArrayList<>();
-        }
-
-        public void addMessage(Message mess) {
-            messageQueue.add(messageQueue.size(), mess);
-        }
-
-        public Message getMessage() {
-            Message mess = messageQueue.get(0);
-            messageQueue.remove(0);
-            return mess;
-        }
-    }
 }
 
 
